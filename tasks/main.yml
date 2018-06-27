@@ -1,0 +1,32 @@
+---
+
+- name: include debian installer
+  include_tasks: installer_debian.yml
+  when: ansible_distribution == 'Debian'
+
+- name: include ubuntu installer
+  include_tasks: installer_ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: include centos installer
+  include_tasks: installer_centos.yml
+  when: ansible_distribution == 'CentOS'
+
+- name: include post install tasks
+  include_tasks: post_install.yml
+
+- name: include group management
+  include_tasks: group.yml
+  when: docker_manage_group
+
+- name: include network management
+  include_tasks: networks.yml
+  when: docker_networks is defined
+
+- name: include volume management
+  include_tasks: volumes.yml
+  when: docker_volumes is defined
+
+- name: include container management
+  include_tasks: containers.yml
+  when: docker_containers is defined

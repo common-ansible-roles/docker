@@ -1,0 +1,13 @@
+---
+
+- name: ensure docker group exists
+  group:
+    name: "{{ docker_group }}"
+    state: present
+
+- name: add users to docker group
+  user:
+    name: "{{ item }}"
+    groups: "{{ docker_group }}"
+    append: yes
+  with_items: "{{ docker_users | default([]) }}"

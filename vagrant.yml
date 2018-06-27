@@ -1,0 +1,23 @@
+---
+
+- hosts: all
+  become: True
+  roles:
+    - role: ../docker
+      docker_manage_group: True
+      docker_users:
+        - "{{ ansible_user }}"
+      docker_networks:
+        - name: test
+      docker_containers:
+        - name: network_check
+          image: infrastructureascode/hello-world
+          networks:
+            - name: test
+          published_ports:
+            - 8080:8080
+  post_tasks:
+    - name: test docker network
+      block:
+        - uri:
+            url: http://127.0.0.1:8080

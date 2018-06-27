@@ -1,0 +1,25 @@
+---
+
+- name: create dummy volume
+  command: docker volume create dummy_for_ansible
+  ignore_errors: yes
+
+- name: manage docker volumes
+  docker_volume:
+    api_version: "{{ item.api_version | default(omit) }}"
+    cacert_path: "{{ item.cacert_path | default(omit) }}"
+    cert_path: "{{ item.cert_path | default(omit) }}"
+    docker_host: "{{ item.docker_host | default(omit) }}"
+    driver: "{{ item.driver | default(omit) }}"
+    driver_options: "{{ item.driver_options | default(omit) }}"
+    force: "{{ item.force | default(omit) }}"
+    key_path: "{{ item.key_path | default(omit) }}"
+    labels: "{{ item.labels | default(omit) }}"
+    name: "{{ item.name }}"
+    ssl_version: "{{ item.ssl_version | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+    timeout: "{{ item.timeout | default(omit) }}"
+    tls: "{{ item.tls | default(omit) }}"
+    tls_hostname: "{{ item.tls_hostname | default(omit) }}"
+    tls_verify: "{{ item.tls_verify | default(omit) }}"
+  with_items: "{{ docker_volumes }}"

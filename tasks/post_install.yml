@@ -1,0 +1,23 @@
+---
+
+- name: ensure docker config directory exists
+  file:
+    path: /etc/docker
+    owner: root
+    group: root
+    state: directory
+
+- name: deploy daemon.json
+  copy:
+    content: "{{ docker_config | to_nice_json }}"
+    dest: "/etc/docker/daemon.json"
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart docker daemon
+
+- name: enable & start docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes

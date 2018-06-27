@@ -1,0 +1,46 @@
+---
+
+- name: uninstall legacy packages
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-engine
+    - docker.io
+
+- name: install requirements
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+    - python-pip
+
+- name: install docker-py
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - docker
+
+- name: add docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: add docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+    filename: docker
+
+- name: install docker
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes

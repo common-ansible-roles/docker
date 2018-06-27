@@ -1,0 +1,12 @@
+---
+
+docker_yum_gpgcheck: True
+
+docker_manage_group: True
+docker_group: docker
+
+docker_config:
+  debug: False
+  dns: []
+  group: docker
+  shutdown-timeout: 15
